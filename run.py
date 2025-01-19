@@ -1,17 +1,14 @@
 import re
 from typing import Union
 import os
+import json
 import yaml
 import subprocess
 import time
 import shutil
 
 from models import StepResult, ChallengeResult, ChallengeError, Challenge, ChallengeResult2, CommitInfo
-
-if os.environ.get("NO_REPORT", None) is None:
-    import reporter
-else:
-    import local_reporter as reporter
+import reporter
 
 
 class ChallengeExecution(object):
@@ -145,16 +142,17 @@ if __name__ == '__main__':
     with open('challenges.yml') as challenges_stream:
         challenges = yaml.load(challenges_stream, Loader=yaml.FullLoader)
 
+    reports = []
     for challenge_dict in challenges:
         challenge = Challenge.from_dict(challenge_dict)
         round_id = int(time.time())
-        reporter.start_round(round_id, challenge.name)
         for p in participants:
             repository = p['repository']
             nickname = p['nickname']
             branch = p.get('branch', None)
             ce = ChallengeExecution(challenge, repository, branch)
             result = run_challenge(ce)
-            reporter.report(nickname, challenge.name, round_id, result)
-            print(result)
-        reporter.finish_round(round_id, challenge.name)
+            reports.append(reporter.report(nickname, challenge.name, round_id, result))
+
+    with open('./report.json', 'w') as file:
+        file.write(json.dumps(reports, default=lambda obj: obj.__dict__))
