@@ -15,9 +15,10 @@ else:
 
 
 class ChallengeExecution(object):
-    def __init__(self, challenge: Challenge, repository: str):
+    def __init__(self, challenge: Challenge, repository: str, branch: str):
         self.challenge = challenge
         self.repository = repository
+        self.branch = branch
 
     def prepare_workspace(self):
         shutil.rmtree('./workspace', ignore_errors=True)
@@ -28,6 +29,8 @@ class ChallengeExecution(object):
         start = time.time()
         script_envs = {**os.environ, **parameters,
                        'CHALLENGE_NAME': self.challenge.name, 'REPOSITORY_URL': self.repository}
+        if self.branch:
+            script_envs['BRANCH_NAME'] = self.branch
 
         p = subprocess.Popen(f'{cmd} {script_path}',
                              shell=True,
@@ -149,7 +152,8 @@ if __name__ == '__main__':
         for p in participants:
             repository = p['repository']
             nickname = p['nickname']
-            ce = ChallengeExecution(challenge, p['repository'])
+            branch = p.get('branch', None)
+            ce = ChallengeExecution(challenge, repository, branch)
             result = run_challenge(ce)
             reporter.report(nickname, challenge.name, round_id, result)
             print(result)
