@@ -5,7 +5,13 @@ import json
 challenge_name = os.getenv('CHALLENGE_NAME')
 test_rate = int(os.getenv('rate', 200))
 test_duration = int(os.getenv('duration', 200))
+
 ENDPOINT = os.getenv('ENDPOINT', 'http://localhost:8080')
+with open(f'workspace/code/{challenge_name}/target.list') as target_file:
+    lines = target_file.readlines()
+    if len(lines) > 0:
+        ENDPOINT = lines[0].split('POST')[1].strip()
+
 validation_result = {}
 with open(f'workspace/code/{challenge_name}/payload.txt') as payload_file:
     payload = int(payload_file.read())
