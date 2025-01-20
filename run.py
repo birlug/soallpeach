@@ -51,6 +51,8 @@ class ChallengeExecution(object):
             except Exception as e:
                 print(e)
             return StepResult(name, 9999, timeout, stdout, stderr + '\nTimeout')
+        except Exception as e:
+            return StepResult(name, 9999, timeout, stdout, stderr)
 
         stdout_lines = p.stdout.readlines() if p.stdout else ''
         stderr_lines = p.stderr.readlines() if p.stderr else ''
