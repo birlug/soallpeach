@@ -117,7 +117,7 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
             step_result = challenge_execution.run_step(step.runner, step.name, step.script, step.timeout,
                                                        parameters=challenge_execution.challenge.parameters)
             step_results[step_result.name] = step_result
-            if step_result.code != 0:
+            if step_result.code != 0 and step_result.name != 'metrics':
                 break
 
         return ChallengeResult2(commit_info=commit_info, **step_results)
