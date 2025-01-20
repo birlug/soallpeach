@@ -1,8 +1,7 @@
-FROM alpine:latest
+FROM tiangolo/uwsgi-nginx:latest
 
-RUN apk add --update python3 py3-flask
+RUN pip install flask
+ENV UWSGI_CHEAPER 0
+ENV UWSGI_PROCESSES 1
 
-WORKDIR /app
 COPY . /app
-
-ENTRYPOINT ["python3", "/app/main.py"]

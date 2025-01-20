@@ -5,6 +5,7 @@ application = Flask(__name__)
 global sum_of_requests
 sum_of_requests = 0
 
+
 @application.route('/count')
 def count():
     global sum_of_requests
@@ -20,4 +21,4 @@ def index():
 
 
 if __name__ == '__main__':
-    application.run(host='0.0.0.0', port=80, debug=True)
+    application.run(debug=True)
