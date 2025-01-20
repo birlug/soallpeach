@@ -2,3 +2,7 @@
   profile: https://github.com/birlug
   repository: https://github.com/birlug/soallpeach
   branch: sample
+- nickname: debug-ing
+  profile: https://github.com/debug-ing
+  repository: https://github.com/debug-ing/birlug-challenge-12
+  branch: master
