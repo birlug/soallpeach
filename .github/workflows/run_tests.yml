@@ -1,48 +1,48 @@
-name: Run tests
+# name: Run tests
 
-on:
-  schedule:
-    - cron: 0 * * * *
-  push:
-    branches:
-      - master
+# on:
+#   schedule:
+#     - cron: 0 * * * *
+#   push:
+#     branches:
+#       - master
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.10.16
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Set up Python
+#       uses: actions/setup-python@v1
+#       with:
+#         python-version: 3.10.16
 
-    - name: Install dependencies
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      run: |
-        mkdir vegeta
-        cd vegeta
-        curl -LO https://github.com/tsenart/vegeta/releases/download/v12.8.3/vegeta-12.8.3-linux-amd64.tar.gz
-        tar -xvf vegeta-*
-        ls
-        chmod +x vegeta
-        echo "::add-path::"$(pwd)/vegeta
-        cd ..
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+#     - name: Install dependencies
+#       env:
+#         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+#       run: |
+#         mkdir vegeta
+#         cd vegeta
+#         curl -LO https://github.com/tsenart/vegeta/releases/download/v12.8.3/vegeta-12.8.3-linux-amd64.tar.gz
+#         tar -xvf vegeta-*
+#         ls
+#         chmod +x vegeta
+#         echo "::add-path::"$(pwd)/vegeta
+#         cd ..
+#         python -m pip install --upgrade pip
+#         pip install -r requirements.txt
 
-    - name: Run
-      run: |
-        export PATH=$(pwd)/vegeta:$PATH
-        python run.py
+#     - name: Run
+#       run: |
+#         export PATH=$(pwd)/vegeta:$PATH
+#         python run.py
 
-    - name: Report
-      run: |
-        git config --local user.name "github-actions[bot]"
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git remote set-url origin "https://github-actions:${GH_TOKEN}@github.com/birlug/soallpeach"
-        git add report.json
-        git commit -m 'update report.json'
-        git push origin HEAD:master
+#     - name: Report
+#       run: |
+#         git config --local user.name "github-actions[bot]"
+#         git config --local user.email "github-actions[bot]@users.noreply.github.com"
+#         git remote set-url origin "https://github-actions:${GH_TOKEN}@github.com/birlug/soallpeach"
+#         git add report.json
+#         git commit -m 'update report.json'
+#         git push origin HEAD:master
